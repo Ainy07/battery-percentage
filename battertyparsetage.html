@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <style>
+          *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    animation: animate 20s linear infinite;
+}
+@keyframes animate{
+    0%{
+        background: hsl(340, 81%, 66%)
+    }
+    25%{
+        background: hsl(130, 65%, 54%);
+    }
+    50%{
+        background: hsl(270, 72%, 55%);
+    }
+    75%{
+        background: hsl(60, 84%, 46%);
+    }
+    100%{
+        background: hsl(340, 51%, 52%);
+    }
+}
+section{
+    background: url(https://picsum.photos/id/160/1920/1080);
+    background--repeat: no-repeat;
+    background-size: cover;
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    font-family: arial,Sans-Serif;
+}
+.box{
+    width: 30%;
+    height: auto;
+    aspect-ratio: 1/1;
+    background: hsla(0, 0%, 100%, 0.1);
+    border-radius: 2vw;
+    box-shadow: 0 1vw 3vw hsla(0, 0%, 0%, 0.25);
+    border: 0.1vw solid hsla(0, 0%, 100%, 0.25) ;
+    border-left: 0.1vw solid hsla(0, 0%, 100%, 0.1) ;
+    border-top: 0.1vw solid hsla(0, 0%, 100%, 0.1) ;
+    backdrop-filter: blur(0.25vw);
+    display: grid;
+    grid-row-gap: 0.1vw;
+    place-items: center;
+}
+.box h3{
+    color: white;
+    letter-spacing: 0.2em;
+    font-weight: 500;
+    font-size: 3vw;
+}
+.battery{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20vw;
+    height: 10vw;
+    border: 0.35vw solid white;
+    border-radius: 1vw;
+}
+.battery::before{
+    content: '';
+    position: absolute;
+    top: 35%;
+    right: -0.75vw;
+    width: 0.5vw;
+    height: 3vw;
+    background: white;
+    border-radius:0 0.5em 0.5em 0;
+}
+.battery::after{
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 50%;
+    background: hsla(0, 0%, 100%, 0.1);
+}
+.level{
+    position: absolute;
+    top: 0.2em;
+    right: 0.2em;
+    bottom: 0.2em;
+    left: 0.2em;
+    border-radius: 1vw;
+    overflow: hidden;
+}
+.percentage{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    border-radius: 1vw;
+    background: linear-gradient(90deg, hsl(100, 100%,50%),hsl(145,100%,50%));
+}
+.cindtr{
+    position: absolute;
+    z-index: 2;
+}
+.fa{
+    font-size: 5vw;
+    color: hsl(220,90%,50%);
+}
+.percent{
+    font-size: 4vw;
+    font-weight: 700;
+    color: white;
+}
+.ntfn{
+    color: orangered;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+}
+        </style>
+        <script>
+          let percentage = document.querySelector('.percentage');
+let percent = document.querySelector('.percent');
+let ntfn = document.querySelector('.ntfn');
+
+navigator.getBattery().then(function(battery){
+  function updateAllBatteryInfo(){
+    updateChargeInfo();
+    updateLevelInfo();
+  }
+  updateAllBatteryInfo();
+  battery.addEventListener('chargingchange', () => {
+       updateChargeInfo();
+  });
+  function updateChargeInfo(){
+    if(battery.charging){ 
+      document.querySelector('#bolt').style.visibility = "visible";
+    }
+    else{
+      document.querySelector('#bolt').style.visibility = "hidden";
+    }
+  }
+  battery.addEventListener('levelchange', () => {
+    updateLevelInfo();
+  });
+  function updateLevelInfo(){
+    var b = battery.level * 100;
+    document.querySelector('.percent').innerHTML = Math.round(b) + '%';
+    percentage.style.width = battery.level * 100 + '%';
+    if(b<15){
+      ntfn.innerHTML = "Low Battery";
+    }
+  }
+});
+        </script>
+    </head>
+    <body>
+            <section>
+              <div class="box">
+                <h3>Battery</h3>
+                <div class="battery">
+                  <div class="level">
+                    <div class="percentage"></div>
+                  </div>
+                  <div class="cindtr">
+                    <i id="bolt" class="fa fa-bolt">
+                    </i>
+                  </div>
+                </div>
+                <div class="percent"></div>
+                <div class="ntfn"></div>
+              </div>
+            </section>
+    </body>
+</html>
