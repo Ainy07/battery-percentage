@@ -1,2 +1,2 @@
 # battery-percentage
-battery-percentage using HTML &amp; CSS
+battery-percentage using HTML, CSS java script
